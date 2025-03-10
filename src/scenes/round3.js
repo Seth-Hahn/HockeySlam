@@ -10,6 +10,6 @@ class Round3 extends Gameround {
     }  
 
     update() {
-        
+        super.update()
     }
 }

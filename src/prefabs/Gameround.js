@@ -14,9 +14,29 @@ class Gameround extends Phaser.Scene {
         this.makeFloors()
 
         //load players at the top of the building
-        this.P1 = this.physics.add.sprite(50, (game.config.height / this.numfloors) - 45, 'P1', 0)
-        this.P2 = this.physics.add.sprite(game.config.width - 50, (game.config.height / this.numfloors) - 45, 'P2', 0)
+        this.P1 = new Player(this, 50, (game.config.height / this.numfloors) - 45, 'P1', //elements used by base class constructor
+                            Phaser.Input.Keyboard.KeyCodes.A, //player specific controls
+                            Phaser.Input.Keyboard.KeyCodes.D,
+                            Phaser.Input.Keyboard.KeyCodes.W,
+                            Phaser.Input.Keyboard.KeyCodes.S,
+                            Phaser.Input.Keyboard.KeyCodes.SPACE,
+
+        )
+        this.P2 = new Player(this, game.config.width - 50, (game.config.height / this.numfloors) - 45, 'P2',
+                            Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET, //player specific controls
+                            Phaser.Input.Keyboard.KeyCodes.BACK_SLASH,
+                            Phaser.Input.Keyboard.KeyCodes.PLUS,
+                            Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET,
+                            Phaser.Input.Keyboard.KeyCodes.FORWARD_SLASH,
+        )
+
     }
+
+    update() {
+        this.P1.update()
+        this.P2.update()
+    }
+
 
     makeFloors() {
         
