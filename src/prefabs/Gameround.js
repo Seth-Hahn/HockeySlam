@@ -12,6 +12,10 @@ class Gameround extends Phaser.Scene {
         
         //add floors (currently temp asset which will be replaced with building hallway)
         this.makeFloors()
+
+        //load players at the top of the building
+        this.P1 = this.physics.add.sprite(50, (game.config.height / this.numfloors) - 45, 'P1', 0)
+        this.P2 = this.physics.add.sprite(game.config.width - 50, (game.config.height / this.numfloors) - 45, 'P2', 0)
     }
 
     makeFloors() {
