@@ -6,7 +6,7 @@
 
 let config = {
     type: Phaser.AUTO,
-    width: 640,
+    width: 720,
     height: 860,
     scene: [Menu, Round1, Round2, Round3],
     physics: {
