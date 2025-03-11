@@ -1,7 +1,8 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, left, right, up, down, shoot, score, shootAnim) {
         super(scene, x , y , texture)
-
+        
+        this.scene = scene
         //add sprite to the scene
         scene.add.existing(this)
         scene.physics.add.existing(this)
@@ -45,12 +46,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setDragX(400)
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.KEYJUMP)) {
+        if(Phaser.Input.Keyboard.JustDown(this.KEYJUMP) && this.body.velocity.y === 0) {
+            
             this.setVelocityY(-300)
+            this.scene.sound.play('jump')
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT)) {
             this.anims.play(this.shootAnim)
+            this.scene.sound.play('shoot')
         }
     }
 }  
