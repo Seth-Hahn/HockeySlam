@@ -30,6 +30,22 @@ class Menu extends Phaser.Scene {
         //to switch to the next after player reaches exit
         this.registry.set('ExitReached', false)
 
+        //create player animations
+        this.anims.create( {
+            key: 'P1_SHOOT',
+            frames: this.anims.generateFrameNumbers('P1', {start: 16, end: 21}),
+            frameRate: 24,
+            repeat: 0
+        })
+        this.anims.create( {
+            key: 'P2_SHOOT',
+            frames: this.anims.generateFrameNumbers('P2', {start: 16, end: 21}),
+            frameRate: 24,
+            repeat: 0
+        })
+
+
+        //load next scene
         console.log('menu scene loaded')
         this.scene.start('round1Scene')
     }

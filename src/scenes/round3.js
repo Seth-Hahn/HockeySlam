@@ -11,5 +11,11 @@ class Round3 extends Gameround {
 
     update() {
         super.update()
+
+        //once exit is reached in 3rd round the game is over
+        if(this.registry.get('ExitReached')) {
+            this.registry.set('ExitReached', false)
+            this.scene.start('menuScene')
+        }
     }
 }

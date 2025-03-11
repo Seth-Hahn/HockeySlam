@@ -6,11 +6,14 @@ class Round1 extends Gameround {
     create() {
         console.log('Round 1 loaded')
         super.create()
-        this.scene.start('round2Scene')
         
     }  
 
     update() {
-      super.update()  
+      super.update()
+      if(this.registry.get('ExitReached')) {
+        this.registry.set('ExitReached', false)
+        this.scene.start('round2Scene')
+    }  
     }
 }
