@@ -26,6 +26,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //set proper player for animations
         this.shootAnim = shootAnim
+        this.bullet = null
 
     }
 
@@ -33,6 +34,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //check for movement
         let playerAcceleration = 100
         let maxSpeed = 120
+
+        //destroy any offscreen bullets
+        if( this.bullet != null &&
+            (this.bullet.x < 0 || 
+             this.bullet.x > game.config.width) ) {
+                this.bullet.destroy()
+                this.bullet = null
+             }
 
         if(this.KEYLEFT.isDown) { //moving left
             this.setAccelerationX(-playerAcceleration)
@@ -54,7 +63,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.scene.sound.play('jump')
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT)) { //shoot gun
+        if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT) && this.bullet === null) { //shoot gun
             this.anims.play(this.shootAnim)
             this.scene.sound.play('shoot')
             this.scene.time.delayedCall(10, () => {
@@ -65,6 +74,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     gunShot(xCoord, yCoord){
+        let direction = this.flipX ? -1 : 1
         //create the paricle effect of the gun being shot
         this.emitter = this.scene.add.particles(xCoord + 50, yCoord + 30, 'particle', {
             speed: { min: -300, max: 300 },
@@ -80,7 +90,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //stop the particle effect and add the bullet
         this.scene.time.delayedCall(10, () => {
             this.emitter.emitting = false;
-            this.bullet = this.scene.physics.add.sprite( xCoord + 50, yCoord + 30, 'bullet').setScale(.3)
+            this.bullet = this.scene.physics.add.sprite( xCoord + (direction * 30), yCoord + 30, 'bullet').setScale(.3)
+            
+            this.scene.physics.add.collider(this.scene.registry.get('playerList'), this.bullet, (player) => {
+                this.bulletCollision(player)
+            })
             this.bulletTravel(this.bullet)
         })
     }
@@ -88,5 +102,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     bulletTravel(bullet){
         let direction = this.flipX ? -1 : 1
         bullet.setVelocityX( direction * 300);
+        
+    }
+
+    bulletCollision(player) {
+        //player that gets hit gets stunned
+        player.setImmovable(true)
+        this.scene.time.delayedCall(60, () => 
+            {
+                player.setImmovable(false)
+            }
+        )
+
+        this.bullet.destroy()
+        this.bullet = null
+
     }
 }  

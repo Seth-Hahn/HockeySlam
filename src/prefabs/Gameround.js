@@ -34,6 +34,7 @@ class Gameround extends Phaser.Scene {
         this.P2.setFlipX(true) //makes p2 face the right way on spawn
         
         this.playerList = [this.P1, this.P2]
+        this.registry.set('playerList', this.playerList)
 
         //add floors and randomize hole positions
         this.makeFloors()
