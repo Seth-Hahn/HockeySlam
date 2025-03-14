@@ -26,6 +26,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //set proper player for animations
         this.shootAnim = shootAnim
+
     }
 
     update() {
@@ -33,28 +34,48 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let playerAcceleration = 100
         let maxSpeed = 120
 
-        if(this.KEYLEFT.isDown) {
+        if(this.KEYLEFT.isDown) { //moving left
             this.setAccelerationX(-playerAcceleration)
             this.setVelocityX(Math.max(this.body.velocity.x, -maxSpeed)) //stops player exceeding speed cap
             this.setFlipX(true)
-        } else if(this.KEYRIGHT.isDown) {
+        } else if(this.KEYRIGHT.isDown) { //moving right
             this.setAccelerationX(playerAcceleration)
             this.setVelocityX(Math.min(this.body.velocity.x, maxSpeed))
             this.setFlipX(false)
-        } else {
+        } else { //slow down
             this.setAccelerationX(0)
             this.setDragX(400)
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.KEYJUMP) && this.body.velocity.y === 0) {
+        if(Phaser.Input.Keyboard.JustDown(this.KEYJUMP) //jump 
+           && this.body.velocity.y === 0) {
             
             this.setVelocityY(-300)
             this.scene.sound.play('jump')
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT)) {
+        if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT)) { //shoot gun
             this.anims.play(this.shootAnim)
             this.scene.sound.play('shoot')
+            this.scene.time.delayedCall(10, () => {
+                this.gunShot(this.body.x, this.body.y)
+            })
+
         }
+    }
+
+    gunShot(xCoord, yCoord){
+        this.emitter = this.scene.add.particles(xCoord + 50, yCoord + 30, 'particle', {
+            speed: { min: -300, max: 300 },
+            angle: {min: 0, max: 360 },
+            scale: { start: 0.25, end: 0},
+            lifespan: 30,
+            quantity: 10,
+            gravityY: 100,
+            emitting: true,
+        })
+        this.scene.time.delayedCall(10, () => {
+            this.emitter.emitting = false;
+        })
     }
 }  
