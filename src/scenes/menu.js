@@ -8,6 +8,7 @@ class Menu extends Phaser.Scene {
         //load images and sprites
         this.load.image('sky', './assets/img/Xtreme_Xcape_Background.png')
         this.load.image('exit', './assets/img/Exit_Door.png')
+        
         this.load.spritesheet('P1', './assets/img/P1_SpriteSheet.png', {
             frameWidth:120,
             frameHeight:120,
@@ -16,6 +17,9 @@ class Menu extends Phaser.Scene {
             frameWidth:120,
             frameHeight:120,
         })
+
+        this.load.image('particle', './assets/img/Shoot_Particle.png')
+
 
         //load sounds
         this.load.audio('shoot', './assets/mp3/shoot.mp3')
