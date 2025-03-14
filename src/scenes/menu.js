@@ -19,7 +19,7 @@ class Menu extends Phaser.Scene {
         })
 
         this.load.image('particle', './assets/img/Shoot_Particle.png')
-
+        this.load.image('bullet', './assets/img/Shoot_Bullet.png')
 
         //load sounds
         this.load.audio('shoot', './assets/mp3/shoot.mp3')
