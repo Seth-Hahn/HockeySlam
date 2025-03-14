@@ -44,15 +44,24 @@ class Menu extends Phaser.Scene {
             frameRate: 24,
             repeat: 0
         })
+        
         this.anims.create( {
             key: 'P2_SHOOT',
             frames: this.anims.generateFrameNumbers('P2', {start: 16, end: 21}),
             frameRate: 24,
             repeat: 0
         })
+        
         this.anims.create( {
             key: 'P1_RUN',
             frames: this.anims.generateFrameNumbers('P1', {start: 1, end: 5}),
+            frameRate: 24,
+            repeat: 0
+        })
+        
+        this.anims.create( {
+            key: 'P2_RUN',
+            frames: this.anims.generateFrameNumbers('P2', {start: 1, end: 5}),
             frameRate: 24,
             repeat: 0
         })
@@ -60,6 +69,13 @@ class Menu extends Phaser.Scene {
         this.anims.create( {
             key: 'P1_RUNSHOOT',
             frames: this.anims.generateFrameNumbers('P1', {start: 32, end: 38}),
+            frameRate: 24,
+            repeat: 0
+        })
+
+        this.anims.create( {
+            key: 'P2_RUNSHOOT',
+            frames: this.anims.generateFrameNumbers('P2', {start: 32, end: 38}),
             frameRate: 24,
             repeat: 0
         })

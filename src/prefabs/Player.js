@@ -105,16 +105,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     gunShot(xCoord, yCoord){
         let direction = this.flipX ? -1 : 1
         //create the paricle effect of the gun being shot
-        this.emitter = this.scene.add.particles(xCoord + 50, yCoord + 30, 'particle', {
+        this.emitter = this.scene.add.particles(xCoord + (direction * 50), yCoord + 30, 'particle', {
             speed: { min: -300, max: 300 },
             angle: {min: 0, max: 360 },
             scale: { start: 0.25, end: 0},
             lifespan: 30,
-            quantity: 10,
+            blendMode: 'ADD',
+            quantity: 1000,
             gravityY: 100,
             emitting: true,
         })
-
 
         //stop the particle effect and add the bullet
         this.scene.time.delayedCall(10, () => {

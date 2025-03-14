@@ -31,7 +31,9 @@ class Gameround extends Phaser.Scene {
                             Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET,
                             Phaser.Input.Keyboard.KeyCodes.FORWARD_SLASH,
                             this.registry.get('P2_Score'),
-                            'P2_SHOOT'
+                            'P2_SHOOT',
+                            'P2_RUN',
+                            'P2_RUNSHOOT'
         )
         this.P2.setFlipX(true) //makes p2 face the right way on spawn
         
