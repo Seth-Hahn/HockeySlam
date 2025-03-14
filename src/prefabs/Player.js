@@ -1,5 +1,5 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, left, right, up, down, shoot, score, shootAnim) {
+    constructor(scene, x, y, texture, left, right, up, down, shoot, score, shootAnim, runAnim, runShootAnim) {
         super(scene, x , y , texture)
         
         this.scene = scene
@@ -28,6 +28,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.shootAnim = shootAnim
         this.bullet = null
 
+        this.runAnim = runAnim
+        this.runShootAnim = runShootAnim
+        this.currentlyRunning = false
+        this.isShooting = false
+
     }
 
     update() {
@@ -43,17 +48,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.bullet = null
              }
 
-        if(this.KEYLEFT.isDown) { //moving left
+        if(this.KEYLEFT.isDown) { //moving left          
+            if(!this.isShooting) {
+                this.anims.play(this.runAnim, true)
+            }
             this.setAccelerationX(-playerAcceleration)
             this.setVelocityX(Math.max(this.body.velocity.x, -maxSpeed)) //stops player exceeding speed cap
             this.setFlipX(true)
+            this.currentlyRunning = true
         } else if(this.KEYRIGHT.isDown) { //moving right
+            if(!this.isShooting) {
+                this.anims.play(this.runAnim, true)
+            }
             this.setAccelerationX(playerAcceleration)
             this.setVelocityX(Math.min(this.body.velocity.x, maxSpeed))
             this.setFlipX(false)
-        } else { //slow down
+            this.currentlyRunning = true
+        } else{ //slow down
             this.setAccelerationX(0)
             this.setDragX(400)
+            this.currentlyRunning = false
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.KEYJUMP) //jump 
@@ -63,11 +77,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.scene.sound.play('jump')
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT) && this.bullet === null) { //shoot gun
-            this.anims.play(this.shootAnim)
+        if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT) && this.bullet === null) { //shoot gun          
+            if(this.currentlyRunning) {
+                this.anims.stop(this.runAnim)
+                this.anims.play(this.runShootAnim, true)
+                this.isShooting = true
+            
+
+                this.once('animationcomplete', (animation) => {
+                    this.isShooting = false
+                    if(this.currentlyRunning) {
+                        this.anims.play(this.runAnim, true)
+                    }
+                })
+            } else {
+                this.anims.play(this.shootAnim)
+            }
+            
             this.scene.sound.play('shoot')
             this.scene.time.delayedCall(10, () => {
-                this.gunShot(this.body.x, this.body.y)
+                 this.gunShot(this.body.x, this.body.y)
             })
 
         }

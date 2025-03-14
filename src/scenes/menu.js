@@ -50,6 +50,19 @@ class Menu extends Phaser.Scene {
             frameRate: 24,
             repeat: 0
         })
+        this.anims.create( {
+            key: 'P1_RUN',
+            frames: this.anims.generateFrameNumbers('P1', {start: 1, end: 5}),
+            frameRate: 24,
+            repeat: 0
+        })
+
+        this.anims.create( {
+            key: 'P1_RUNSHOOT',
+            frames: this.anims.generateFrameNumbers('P1', {start: 32, end: 38}),
+            frameRate: 24,
+            repeat: 0
+        })
 
 
         //load next scene

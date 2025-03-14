@@ -19,7 +19,9 @@ class Gameround extends Phaser.Scene {
                             Phaser.Input.Keyboard.KeyCodes.S,
                             Phaser.Input.Keyboard.KeyCodes.SPACE,
                             this.registry.get('P1_Score'), //get current score at the start of each round
-                            'P1_SHOOT'
+                            'P1_SHOOT',
+                            'P1_RUN',
+                            'P1_RUNSHOOT'
 
         )
         this.P2 = new Player(this, game.config.width - 50, (game.config.height / this.numfloors) - 85, 'P2',
