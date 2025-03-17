@@ -80,6 +80,17 @@ class Menu extends Phaser.Scene {
             repeat: 0
         })
 
+        this.anims.create( {
+            key: 'P1_CROUCH',
+            frames: [{ key: 'P1', frame: 48}],
+            repeat: 0
+        })
+
+        this.anims.create( {
+            key: 'P2_CROUCH',
+            frames: [{ key: 'P2', frame: 48}],
+            repeat: 0
+        })
 
         //load next scene
         console.log('menu scene loaded')

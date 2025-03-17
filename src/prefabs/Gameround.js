@@ -21,7 +21,8 @@ class Gameround extends Phaser.Scene {
                             this.registry.get('P1_Score'), //get current score at the start of each round
                             'P1_SHOOT',
                             'P1_RUN',
-                            'P1_RUNSHOOT'
+                            'P1_RUNSHOOT',
+                            'P1_CROUCH'
 
         )
         this.P2 = new Player(this, game.config.width - 50, (game.config.height / this.numfloors) - 85, 'P2',
@@ -33,7 +34,8 @@ class Gameround extends Phaser.Scene {
                             this.registry.get('P2_Score'),
                             'P2_SHOOT',
                             'P2_RUN',
-                            'P2_RUNSHOOT'
+                            'P2_RUNSHOOT',
+                            'P2_CROUCH'
         )
         this.P2.setFlipX(true) //makes p2 face the right way on spawn
         

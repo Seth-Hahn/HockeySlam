@@ -1,5 +1,8 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, left, right, up, down, shoot, score, shootAnim, runAnim, runShootAnim) {
+    constructor(scene, x, y, texture, //inherited 
+                left, right, up, down, shoot, //controls
+                score,                        //score keeping
+                shootAnim, runAnim, runShootAnim, crouchAnim) { //animations
         super(scene, x , y , texture)
         
         this.scene = scene
@@ -33,6 +36,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.currentlyRunning = false
         this.isShooting = false
 
+        this.crouchAnim = crouchAnim 
     }
 
     update() {
@@ -48,7 +52,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.bullet = null
              }
 
-        if(this.KEYLEFT.isDown) { //moving left          
+        if(this.KEYLEFT.isDown && !this.KEYCROUCH.isDown) { //moving left          
             if(!this.isShooting) {
                 this.anims.play(this.runAnim, true)
             }
@@ -56,7 +60,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityX(Math.max(this.body.velocity.x, -maxSpeed)) //stops player exceeding speed cap
             this.setFlipX(true)
             this.currentlyRunning = true
-        } else if(this.KEYRIGHT.isDown) { //moving right
+        } else if(this.KEYRIGHT.isDown && !this.KEYCROUCH.isDown) { //moving right
             if(!this.isShooting) {
                 this.anims.play(this.runAnim, true)
             }
@@ -75,7 +79,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             
             this.setVelocityY(-300)
             this.scene.sound.play('jump')
+            this.anims.stop(this.crouchAnim)
         }
+
+        if(this.KEYCROUCH.isDown) {
+            this.anims.play(this.crouchAnim)
+        } 
 
         if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT) && this.bullet === null) { //shoot gun          
             if(this.currentlyRunning) {
