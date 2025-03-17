@@ -45,8 +45,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        let playerAcceleration = 100
-        let maxSpeed = 120
+        let playerAcceleration = 400
+        let maxSpeed = 100
 
         //destroy any offscreen bullets
         if( this.bullet != null &&
@@ -75,7 +75,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.currentlyRunning = true
         } else{ //slow down
             this.setAccelerationX(0)
-            this.setDragX(400)
+            this.setDragX(600)
             this.currentlyRunning = false
         }
 
