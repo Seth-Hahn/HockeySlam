@@ -22,9 +22,11 @@ class Gameround extends Phaser.Scene {
                             'P1_SHOOT',
                             'P1_RUN',
                             'P1_RUNSHOOT',
-                            'P1_CROUCH'
+                            'P1_CROUCH',
+                            'P1_IDLE'
 
         )
+
         this.P2 = new Player(this, game.config.width - 50, (game.config.height / this.numfloors) - 85, 'P2',
                             Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET, //player specific controls
                             Phaser.Input.Keyboard.KeyCodes.BACK_SLASH,
@@ -35,10 +37,11 @@ class Gameround extends Phaser.Scene {
                             'P2_SHOOT',
                             'P2_RUN',
                             'P2_RUNSHOOT',
-                            'P2_CROUCH'
+                            'P2_CROUCH',
+                            'P2_IDLE'
         )
         this.P2.setFlipX(true) //makes p2 face the right way on spawn
-        
+
         this.playerList = [this.P1, this.P2]
         this.registry.set('playerList', this.playerList)
 

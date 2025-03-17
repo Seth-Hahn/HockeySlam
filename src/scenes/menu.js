@@ -39,6 +39,18 @@ class Menu extends Phaser.Scene {
 
         //create player animations
         this.anims.create( {
+            key: 'P1_IDLE',
+            frames: [{ key: 'P1', frame: 0}],
+            repeat: 0
+        })
+
+        this.anims.create( {
+            key: 'P2_IDLE',
+            frames: [{ key: 'P2', frame: 0}],
+            repeat: 0
+        })
+
+        this.anims.create( {
             key: 'P1_SHOOT',
             frames: this.anims.generateFrameNumbers('P1', {start: 16, end: 21}),
             frameRate: 24,

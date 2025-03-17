@@ -2,7 +2,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, //inherited 
                 left, right, up, down, shoot, //controls
                 score,                        //score keeping
-                shootAnim, runAnim, runShootAnim, crouchAnim) { //animations
+                shootAnim, runAnim, runShootAnim, crouchAnim, idleAnim) { //animations
         super(scene, x , y , texture)
         
         this.scene = scene
@@ -26,7 +26,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //hold current score for game
         this.score = score
-
+        
+        this.idleAnim = idleAnim
         //set proper player for animations
         this.shootAnim = shootAnim
         this.bullet = null
@@ -36,11 +37,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.currentlyRunning = false
         this.isShooting = false
 
+        //crouching properties
         this.crouchAnim = crouchAnim 
+        this.originalWidth = this.body.width //these 2 variables help with hurtbox shifting
+        this.originalHeight = this.body.height
+        this.isCrouching = false
     }
 
     update() {
-        //check for movement
         let playerAcceleration = 100
         let maxSpeed = 120
 
@@ -51,7 +55,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.bullet.destroy()
                 this.bullet = null
              }
-
+    
+        //Movement Checks 
         if(this.KEYLEFT.isDown && !this.KEYCROUCH.isDown) { //moving left          
             if(!this.isShooting) {
                 this.anims.play(this.runAnim, true)
@@ -82,9 +87,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.anims.stop(this.crouchAnim)
         }
 
-        if(this.KEYCROUCH.isDown) {
+        if(this.KEYCROUCH.isDown) { //crouch
             this.anims.play(this.crouchAnim)
-        } 
+            this.crouchHitbox()
+        } else if (this.isCrouching) { //auto uncrouch
+            this.standHitbox()
+        }
 
         if(Phaser.Input.Keyboard.JustDown(this.KEYSHOOT) && this.bullet === null) { //shoot gun          
             if(this.currentlyRunning) {
@@ -155,5 +163,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.bullet.destroy()
         this.bullet = null
 
+    }
+
+    crouchHitbox() {
+        let crouchHeight = this.originalHeight / 2
+        let crouchWidth = this.originalWidth / 2
+        this.body.setSize(crouchWidth, crouchHeight)
+        this.body.setOffset(this.originalWidth * 2, this.originalHeight * 1.1)
+        this.isCrouching = true
+    }
+
+    standHitbox() {
+        this.body.setSize(this.originalWidth, this.originalHeight)
+        this.body.setOffset(this.originalWidth * 2, this.originalHeight / 1.6)
+
+        this.isCrouching = false
+        this.anims.play(this.idleAnim)
     }
 }  
