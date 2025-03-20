@@ -2,15 +2,18 @@
 //main class that handles building generation 
 //each round is an extension of this class 
 class Gameround extends Phaser.Scene {
-    constructor(sceneTag, numberOfFloors) {
+    constructor(sceneTag, numberOfFloors, numberOfEnemies) {
         super(sceneTag)
         this.numfloors = numberOfFloors + 1
+        this.numEnemies = numberOfEnemies
     }
 
     create() {
         //add background
         this.sky = this.add.tileSprite(0,0,720,860, 'sky').setOrigin(0,0)
         
+        //add UI
+        this.UI = this.add.sprite(0,0,'UI').setOrigin(0,0)
         //load players at the top of the building
         this.P1 = new Player(this, 50, (game.config.height / this.numfloors) - 85, 'P1', //elements used by base class constructor
                             Phaser.Input.Keyboard.KeyCodes.A, //player specific controls
@@ -45,9 +48,14 @@ class Gameround extends Phaser.Scene {
         this.playerList = [this.P1, this.P2]
         this.registry.set('playerList', this.playerList)
 
+        //randomly spawn enemies among floors
+        this.enemyList = []
+        this.createEnemies()
         //add floors and randomize hole positions
         this.makeFloors()
+        
 
+        this.physics.add.collider(this.enemyList, this.floors)
         //add exit
         this.makeExit()
 
@@ -56,6 +64,9 @@ class Gameround extends Phaser.Scene {
     update() {
         this.P1.update()
         this.P2.update()
+        this.enemyList.forEach(enemy => {
+            enemy.update()
+        })
     }
 
 
@@ -112,10 +123,26 @@ class Gameround extends Phaser.Scene {
         //add collision between player and door for both players
         this.playerList.forEach(player => {
             this.physics.add.collider(player, this.exit, () => {
-
-                this.registry.set('P1_Score', player.score + 1) //add one to round winner's score
+                //TODO FIX THE SCORE KEEPING SYSTEM
+                //this.registry.set('P1_Score', player.score + 1) //add one to round winner's score
                 this.registry.set('ExitReached', true)
             })
         })
+    }
+
+    createEnemies() {
+
+        for(let i = 1; i <= this.numEnemies; i++){
+
+            //randomly pick a floor to spawn on
+            let spawnFloor = Phaser.Math.Between(1, 10000000000) % this.numfloors
+            //randomize x coord
+            let aiXCoord = Phaser.Math.Between(0, game.config.width)
+
+            let enemy = new Enemy(this, aiXCoord, game.config.height / spawnFloor, 'AI', 'AI_SHOOT', 'AI_RUN', 'AI_RUNSHOOT')
+            enemy.setDepth(10)
+            this.enemyList.push(enemy)
+
+        }
     }
 }

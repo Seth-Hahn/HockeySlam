@@ -1,6 +1,6 @@
 class Round2 extends Gameround {
     constructor() {
-        super("round2Scene", 6)
+        super("round2Scene", 6, 5)
     }
 
     create() {
