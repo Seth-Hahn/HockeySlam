@@ -11,9 +11,10 @@ class Gameround extends Phaser.Scene {
     create() {
         //add background
         this.sky = this.add.tileSprite(0,0,720,860, 'sky').setOrigin(0,0)
-        
+        this.wall = this.add.sprite(0,game.config.height / this.numfloors, 'wall').setOrigin(0,0)
         //add UI
         this.UI = this.add.sprite(0,0,'UI').setOrigin(0,0)
+
         //load players at the top of the building
         this.P1 = new Player(this, 50, (game.config.height / this.numfloors) - 85, 'P1', //elements used by base class constructor
                             Phaser.Input.Keyboard.KeyCodes.A, //player specific controls
@@ -21,7 +22,7 @@ class Gameround extends Phaser.Scene {
                             Phaser.Input.Keyboard.KeyCodes.W,
                             Phaser.Input.Keyboard.KeyCodes.S,
                             Phaser.Input.Keyboard.KeyCodes.SPACE,
-                            this.registry.get('P1_Score'), //get current score at the start of each round
+                            'P1_Score', //get current score at the start of each round
                             'P1_SHOOT',
                             'P1_RUN',
                             'P1_RUNSHOOT',
@@ -36,7 +37,7 @@ class Gameround extends Phaser.Scene {
                             Phaser.Input.Keyboard.KeyCodes.PLUS,
                             Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET,
                             Phaser.Input.Keyboard.KeyCodes.FORWARD_SLASH,
-                            this.registry.get('P2_Score'),
+                            'P2_Score',
                             'P2_SHOOT',
                             'P2_RUN',
                             'P2_RUNSHOOT',
@@ -60,8 +61,26 @@ class Gameround extends Phaser.Scene {
         //add exit
         this.makeExit()
 
-        
+        //add floor signs
+        for(let i = 1; i < this.numfloors; i++) {
+            this.createFloorSign(i)
+        }
 
+        //add player score to UI
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            color: '#fff600',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            },
+        }
+        this.P1ScoreUI = this.add.text(game.config.width / 3.3, game.config.height / 500, this.registry.get(this.P1.score), scoreConfig)
+        this.P2ScoreUI = this.add.text(game.config.width / 1.09 , game.config.height / 500, this.registry.get(this.P2.score), scoreConfig)
+
+        console.log(this.registry.get(this.P1.score))
     }
 
     update() {
@@ -91,7 +110,7 @@ class Gameround extends Phaser.Scene {
             let hole_Xvalue = (i === 1) ? ( game.config.width / 2) - (hole_Width / 2): Phaser.Math.Between(25, game.config.width - hole_Width)
 
             //left side of floor
-            let leftFloor = this.add.rectangle(0, floor_Yvalue, hole_Xvalue, game.config.width / 50, 0x000000).setOrigin(0,0)
+            let leftFloor = this.add.rectangle(0, floor_Yvalue, hole_Xvalue, game.config.width / 50, 0xc1a646).setOrigin(0,0)
 
             //add physics to left floor
             this.physics.add.existing(leftFloor)
@@ -101,7 +120,7 @@ class Gameround extends Phaser.Scene {
             this.floors.push(leftFloor)
 
             //right side of floor
-            let rightFloor = this.add.rectangle(hole_Xvalue + hole_Width, floor_Yvalue, game.config.width - hole_Xvalue - hole_Width, game.config.width / 50, 0x000000).setOrigin(0,0)
+            let rightFloor = this.add.rectangle(hole_Xvalue + hole_Width, floor_Yvalue, game.config.width - hole_Xvalue - hole_Width, game.config.width / 50, 0xc1a646).setOrigin(0,0)
 
             //add physics to floor
             this.physics.add.existing(rightFloor)
@@ -130,10 +149,13 @@ class Gameround extends Phaser.Scene {
 
         //add collision between player and door for both players
         this.playerList.forEach(player => {
-            this.physics.add.collider(player, this.exit, () => {
-                //TODO FIX THE SCORE KEEPING SYSTEM
-                //this.registry.set('P1_Score', player.score + 1) //add one to round winner's score
-                this.registry.set('ExitReached', true)
+            this.physics.add.collider(player, this.exit, (collidingPlayer) => {
+                if(!this.registry.get('ExitReached')) {
+                
+                    let currentScore = this.registry.get(collidingPlayer.score)
+                    this.registry.set(collidingPlayer.score, currentScore + 1) //add one to round winner's score
+                    this.registry.set('ExitReached', true)
+                }
             })
         })
     }
@@ -165,5 +187,26 @@ class Gameround extends Phaser.Scene {
         if(hitPlayer && enemy.bullet === null) {
             enemy.gunShot(enemy.body.x, enemy.body.y)
         }
+    }
+
+    createFloorSign(floorLevel) {
+        let signHeight = (game.config.height / this.numfloors) * floorLevel
+        let signHeightOffset = game.config.height / 25
+        let signTextConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#Ff6600',
+            color: '#000000',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            },
+        }
+        this.add.text(game.config.width / 2, signHeight + signHeightOffset, this.numfloors - floorLevel + 'F', signTextConfig).setDepth(0)
+    }
+
+    endGame(winnerData) {
+       this.scene.start('endScene', winnerData)
     }
 }
