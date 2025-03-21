@@ -50,6 +50,7 @@ class Gameround extends Phaser.Scene {
 
         //randomly spawn enemies among floors
         this.enemyList = []
+        this.registry.set('enemyList', this.enemyList)
         this.createEnemies()
         //add floors and randomize hole positions
         this.makeFloors()
@@ -67,7 +68,7 @@ class Gameround extends Phaser.Scene {
         this.P1.update()
         this.P2.update()
         this.enemyList.forEach(enemy => {
-            if(enemy) {
+            if(!enemy.isShot) {
                 enemy.update()
                 this.detectPlayer(enemy)
             }
@@ -142,7 +143,7 @@ class Gameround extends Phaser.Scene {
         for(let i = 1; i <= this.numEnemies; i++){
 
             //randomly pick a floor to spawn on
-            let spawnFloor = Phaser.Math.Between(1, 10000000000) % this.numfloors
+            let spawnFloor = Phaser.Math.Between(2, this.numfloors)
             //randomize x coord
             let aiXCoord = Phaser.Math.Between(0, game.config.width)
 

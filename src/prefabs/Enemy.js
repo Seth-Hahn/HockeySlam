@@ -14,6 +14,7 @@ class Enemy extends Player {
                     this.vectorEnd = this.vectorStart.clone().add(this.vectorDirecion.scale(100))
 
                     this.isAI = true
+                    this.isShot = false
 
                 }
     
@@ -25,7 +26,8 @@ class Enemy extends Player {
                 this.bullet.destroy()
                 this.bullet = null
              }
-        if(this && this.body) {
+        if(this && this.body //Ai must exist and must not have been shot
+            && !this.isShot) {
         
             let AiAcceleration = 300
             let maxSpeed = 100

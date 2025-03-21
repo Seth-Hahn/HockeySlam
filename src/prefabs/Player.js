@@ -148,6 +148,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.scene.physics.add.collider(this.scene.registry.get('playerList'), this.bullet, (player) => {
                     this.bulletCollision(player)
                 })
+
+                if(!this.isAI) { //only players can shoot AI enemies
+                    this.scene.physics.add.collider(this.scene.registry.get('enemyList'), this.bullet, (enemy) => {
+                        this.bulletCollisionAI(enemy)
+                    })
+                }
                 this.bulletTravel(this.bullet)
             })
         }
@@ -167,6 +173,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             player.setImmovable(false)
         })
         
+        if(this.bullet != null) {
+            this.bullet.destroy()
+        }
+        this.bullet = null
+    }
+
+    bulletCollisionAI(enemy) {
+        enemy.setActive(false).setVisible(false)
+        enemy.body.enable = false
+        enemy.isShot = true
         if(this.bullet != null) {
             this.bullet.destroy()
         }
