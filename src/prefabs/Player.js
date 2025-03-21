@@ -42,6 +42,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.originalWidth = this.body.width //these 2 variables help with hurtbox shifting
         this.originalHeight = this.body.height
         this.isCrouching = false
+        
+        //allows for proper shot timing for AI vs Human players
+        this.isAI = false
     }
 
     update() {
@@ -120,29 +123,34 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     gunShot(xCoord, yCoord){
-        let direction = this.flipX ? -1 : 1
-        //create the paricle effect of the gun being shot
-        this.emitter = this.scene.add.particles(xCoord + (direction * 50), yCoord + 30, 'particle', {
-            speed: { min: -300, max: 300 },
-            angle: {min: 0, max: 360 },
-            scale: { start: 0.25, end: 0},
-            lifespan: 30,
-            blendMode: 'ADD',
-            quantity: 1000,
-            gravityY: 100,
-            emitting: true,
-        })
-
-        //stop the particle effect and add the bullet
-        this.scene.time.delayedCall(10, () => {
-            this.emitter.emitting = false;
-            this.bullet = this.scene.physics.add.sprite( xCoord + (direction * 30), yCoord + 30, 'bullet').setScale(.3)
-            
-            this.scene.physics.add.collider(this.scene.registry.get('playerList'), this.bullet, (player) => {
-                this.bulletCollision(player)
+        if(this.isAI && this.bullet === null) { 
+            this.bullet = 1 //dummy variable used to stop AI from shooting every frame
+        }
+        if(this && this.body) { 
+            let direction = this.flipX ? -1 : 1
+            //create the paricle effect of the gun being shot
+            this.emitter = this.scene.add.particles(xCoord + (direction * 50), yCoord + 30, 'particle', {
+                speed: { min: -300, max: 300 },
+                angle: {min: 0, max: 360 },
+                scale: { start: 0.25, end: 0},
+                lifespan: 30,
+                blendMode: 'ADD',
+                quantity: 1000,
+                gravityY: 100,
+                emitting: true,
             })
-            this.bulletTravel(this.bullet)
-        })
+
+            //stop the particle effect and add the bullet
+            this.scene.time.delayedCall(10, () => {
+                this.emitter.emitting = false;
+                this.bullet = this.scene.physics.add.sprite( xCoord + (direction * 30), yCoord + 30, 'bullet').setScale(.3)
+                
+                this.scene.physics.add.collider(this.scene.registry.get('playerList'), this.bullet, (player) => {
+                    this.bulletCollision(player)
+                })
+                this.bulletTravel(this.bullet)
+            })
+        }
     }
 
     bulletTravel(bullet){
@@ -155,14 +163,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //player that gets hit gets stunned
         player.setImmovable(true)
         this.scene.time.delayedCall(60, () => 
-            {
-                player.setImmovable(false)
-            }
-        )
-
-        this.bullet.destroy()
+        {
+            player.setImmovable(false)
+        })
+        
+        if(this.bullet != null) {
+            this.bullet.destroy()
+        }
         this.bullet = null
-
     }
 
     crouchHitbox() {

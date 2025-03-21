@@ -59,14 +59,20 @@ class Gameround extends Phaser.Scene {
         //add exit
         this.makeExit()
 
+        
+
     }
 
     update() {
         this.P1.update()
         this.P2.update()
         this.enemyList.forEach(enemy => {
-            enemy.update()
+            if(enemy) {
+                enemy.update()
+                this.detectPlayer(enemy)
+            }
         })
+
     }
 
 
@@ -110,6 +116,7 @@ class Gameround extends Phaser.Scene {
             this.physics.add.collider(this.P1, floor)
             this.physics.add.collider(this.P2, floor)
         })
+
     }
 
     makeExit() {
@@ -143,6 +150,19 @@ class Gameround extends Phaser.Scene {
             enemy.setDepth(10)
             this.enemyList.push(enemy)
 
+        }
+    }
+
+    detectPlayer(enemy) {
+        let hitPlayer = false
+        this.playerList.forEach(player => {
+            if(Phaser.Geom.Intersects.LineToRectangle(new Phaser.Geom.Line(enemy.vectorStart.x, enemy.vectorStart.y, enemy.vectorEnd.x, enemy.vectorEnd.y), player.getBounds())) {
+                hitPlayer = true
+            }
+        })
+
+        if(hitPlayer && enemy.bullet === null) {
+            enemy.gunShot(enemy.body.x, enemy.body.y)
         }
     }
 }
