@@ -15,6 +15,7 @@ class Enemy extends Player {
 
                     this.isAI = true
                     this.isShot = false
+                    this.isShooting = false
 
                 }
     
@@ -40,7 +41,9 @@ class Enemy extends Player {
             }
             this.setAccelerationX(AiAcceleration * this.direction)
             this.setVelocityX(Phaser.Math.Clamp(this.body.velocity.x,  -maxSpeed, maxSpeed)) //stops player exceeding speed cap
-            this.anims.play(this.runAnim, true)
+            if(!this.isShooting) {
+                this.anims.play(this.runAnim, true)
+            }
 
             //detection vector for when AI should shoot at player
             this.vectorDirecion = new Phaser.Math.Vector2(this.direction, 0)

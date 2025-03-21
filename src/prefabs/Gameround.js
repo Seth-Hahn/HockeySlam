@@ -186,6 +186,12 @@ class Gameround extends Phaser.Scene {
 
         if(hitPlayer && enemy.bullet === null) {
             enemy.gunShot(enemy.body.x, enemy.body.y)
+            enemy.isShooting = true
+            this.sound.play('enemyShoot')
+            enemy.anims.play(enemy.runShootAnim, true)
+            enemy.once('animationcomplete', () => {
+                enemy.isShooting = false
+            })
         }
     }
 
