@@ -162,7 +162,7 @@ class Menu extends Phaser.Scene {
 
         this.controls.on('pointerdown', () => {
             this.controlPage = this.add.sprite(0,0,'controls').setOrigin(0,0)
-            this.backToMenu = this.add.text(game.config.width / 30, game.config.height / 1.1, 'menu', buttonTextConfig)
+            this.backToMenu = this.add.text(game.config.width / 30, game.config.height / 1.15, 'menu', buttonTextConfig)
             this.backToMenu.setInteractive()
             this.backToMenu.on('pointerdown', () => {
                 this.controlPage.setVisible(false)
@@ -186,10 +186,11 @@ class Menu extends Phaser.Scene {
         let showCredit = true
         this.credits.on('pointerdown', () => {
             if(showCredit) {
-                this.creditText = this.add.text(game.config.width / 4, game.config.height / 1.1,
+                this.creditText = this.add.text(game.config.width / 5, game.config.height / 1.3,
                 'Art - Seth Hahn \n' +
                 'Sound Effects - Seth Hahn \n' +
-                'Programming - Seth Hahn \n'
+                'Programming - Seth Hahn \n' + 
+                'Original Idea - J.G. Quintel and Regular Show'
                 , creditTextConfig)
                 showCredit = false
             } else {
