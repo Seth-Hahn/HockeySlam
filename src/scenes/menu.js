@@ -12,6 +12,7 @@ class Menu extends Phaser.Scene {
         this.load.image('wall', './assets/img/Xtreme_Xcape_Wall.png')
         this.load.image('endScreen', './assets/img/Xtreme_Xcape_EndScreen.png')
         this.load.image('titlescreen', './assets/img/Xtreme_XCape_TitleScreen.png')
+        this.load.image('controls', './assets/img/Xtreme_Xcape_Controls.png')
 
         this.load.spritesheet('P1', './assets/img/P1_SpriteSheet.png', {
             frameWidth:120,
@@ -158,8 +159,44 @@ class Menu extends Phaser.Scene {
         this.playButton.on('pointerdown', () => {
             this.scene.start('round1Scene')
         })
-       
-        //this.scene.start('round1Scene')
+
+        this.controls.on('pointerdown', () => {
+            this.controlPage = this.add.sprite(0,0,'controls').setOrigin(0,0)
+            this.backToMenu = this.add.text(game.config.width / 30, game.config.height / 1.1, 'menu', buttonTextConfig)
+            this.backToMenu.setInteractive()
+            this.backToMenu.on('pointerdown', () => {
+                this.controlPage.setVisible(false)
+                this.backToMenu.setVisible(false)
+            })
+        })
+
+        let creditTextConfig = {
+            fontFamily: 'courier',
+            fontSize: '20px',
+            backgroundColor: '#00ff3c',
+            color: '#000000',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            left: 5,
+            right: 5
+            },
+        }
+        let showCredit = true
+        this.credits.on('pointerdown', () => {
+            if(showCredit) {
+                this.creditText = this.add.text(game.config.width / 4, game.config.height / 1.1,
+                'Art - Seth Hahn \n' +
+                'Sound Effects - Seth Hahn \n' +
+                'Programming - Seth Hahn \n'
+                , creditTextConfig)
+                showCredit = false
+            } else {
+                this.creditText.setVisible(false)
+                showCredit = true
+            }
+        })
     }
 
 
