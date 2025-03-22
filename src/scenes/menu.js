@@ -11,7 +11,7 @@ class Menu extends Phaser.Scene {
         this.load.image('UI', './assets/img/Xtreme_Xcape_UI.png')
         this.load.image('wall', './assets/img/Xtreme_Xcape_Wall.png')
         this.load.image('endScreen', './assets/img/Xtreme_Xcape_EndScreen.png')
-        this.load.image('titlescreen', './assets/img/Xtreme_XCape_TitleScreen.png')
+        this.load.image('titlescreen', './assets/img/Xtreme_Xcape_TitleScreen.png')
         this.load.image('controls', './assets/img/Xtreme_Xcape_Controls.png')
 
         this.load.spritesheet('P1', './assets/img/P1_SpriteSheet.png', {
