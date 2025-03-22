@@ -11,6 +11,7 @@ class Menu extends Phaser.Scene {
         this.load.image('UI', './assets/img/Xtreme_Xcape_UI.png')
         this.load.image('wall', './assets/img/Xtreme_Xcape_Wall.png')
         this.load.image('endScreen', './assets/img/Xtreme_Xcape_EndScreen.png')
+        this.load.image('titlescreen', './assets/img/Xtreme_XCape_TitleScreen.png')
 
         this.load.spritesheet('P1', './assets/img/P1_SpriteSheet.png', {
             frameWidth:120,
@@ -133,9 +134,32 @@ class Menu extends Phaser.Scene {
             repeat: 0
         })
 
-        //load next scene
-        console.log('menu scene loaded')
-        this.scene.start('round1Scene')
+        //show title screen
+        this.titlescreen = this.add.sprite(0,0,'titlescreen').setOrigin(0,0)
+
+        //title screen button config
+        let buttonTextConfig = {
+            fontFamily: 'Phosphate',
+            fontSize: '55px',
+            backgroundColor: '#00ff3c',
+            color: '#000000',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            left: 5,
+            right: 5
+            },
+        }
+        this.playButton = this.add.text(game.config.width / 1.22, game.config.height / 2.5, 'Play', buttonTextConfig).setInteractive()
+        this.controls = this.add.text(game.config.width / 1.6, game.config.height / 1.9, 'Controls', buttonTextConfig).setInteractive()
+        this.credits = this.add.text(game.config.width / 1.4, game.config.height / 1.08, 'Credits', buttonTextConfig).setInteractive()
+       
+        this.playButton.on('pointerdown', () => {
+            this.scene.start('round1Scene')
+        })
+       
+        //this.scene.start('round1Scene')
     }
 
 
