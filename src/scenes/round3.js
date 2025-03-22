@@ -1,10 +1,9 @@
 class Round3 extends Gameround {
     constructor() {
-        super("round3Scene", 8, 8)
+        super("round3Scene", 3, 8, 8)
     }
 
     create() {
-        console.log('Round 3 loaded')
         let p1Score = this.registry.get('P1_Score')
         let p2Score = this.registry.get('P2_Score')
             if(p1Score >= 2) {
