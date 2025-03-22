@@ -18,7 +18,8 @@ class Enemy extends Player {
                     this.isShooting = false
 
                 }
-    
+   //TODO 
+   //ADD PARTICLE EFFECTS AND BUILDING EXPLOSION SOUNDS 
     update(){
         //destroy any offscreen bullets
         if( this.bullet != null &&
