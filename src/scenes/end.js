@@ -22,6 +22,7 @@ class End extends Phaser.Scene {
         //display winner on end screen
         this.winningPlayer = this.add.sprite(game.config.width / 1.1 , game.config.height / 1.3, this.winner, 0).setDepth(999).setScale(2,2)
         
+        this.sound.play('explosion')
         //add background and win text
         this.background = this.add.sprite(0,0, 'endScreen').setOrigin(0,0)
         this.winTextDisplay = this.add.text(game.config.width / 2, game.config.height / 5, this.winText, this.endTextConfig)
