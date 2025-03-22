@@ -18,7 +18,15 @@
 //    to show time elapsed each round. Delayed calls are used to transition between
 //    round number and stop watch as well as being used to properly handle the process 
 //    of the gunshot (when to play animations, sound effects, etc.)
-
+//
+// Polish & Style:
+//  I think the work done to make functioning Ai enemies was an incredibly important feature
+//  to the overall game and took a lot of work to implement. I created the enemies
+//  as a child class of the Player class and had to utilize both shared and unique methods
+//  to account for all possible interactions between the two entities and handle physics properly.
+//  As well, having Ai properly detect when a player is in their sights and shooting at them
+//  while also moving around the screen makes the gameplay dynamic and the enemies feel like actual
+//  obstacles.
 
 
 let config = {
