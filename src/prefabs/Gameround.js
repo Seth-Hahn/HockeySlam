@@ -2,8 +2,9 @@
 //main class that handles building generation 
 //each round is an extension of this class 
 class Gameround extends Phaser.Scene {
-    constructor(sceneTag, numberOfFloors, numberOfEnemies) {
+    constructor(sceneTag,roundNum, numberOfFloors, numberOfEnemies) {
         super(sceneTag)
+        this.round = roundNum
         this.numfloors = numberOfFloors + 1
         this.numEnemies = numberOfEnemies
     }
@@ -80,6 +81,23 @@ class Gameround extends Phaser.Scene {
         this.P1ScoreUI = this.add.text(game.config.width / 3.3, game.config.height / 500, this.registry.get(this.P1.score), scoreConfig)
         this.P2ScoreUI = this.add.text(game.config.width / 1.09 , game.config.height / 500, this.registry.get(this.P2.score), scoreConfig)
 
+        this.showRound = this.add.text(game.config.width / 2.25, game.config.height / 500, 'Round' + this.round, scoreConfig )
+        
+        //timer that shows how long players have been in the round
+        this.elapsedSeconds = 0
+        this.timeText = this.add.text(game.config.width / 2.25, game.config.height / 500, '0', scoreConfig ).setVisible(false)
+        this.timerEvent = this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                this.elapsedSeconds++
+                this.timeText.setText(this.elapsedSeconds)
+            },
+            loop: true
+        })
+        this.time.delayedCall(2000, () => {
+            this.showRound.setVisible(false)
+            this.timeText.setVisible(true)
+        } )
         console.log(this.registry.get(this.P1.score))
     }
 
@@ -92,6 +110,7 @@ class Gameround extends Phaser.Scene {
                 this.detectPlayer(enemy)
             }
         })
+
 
     }
 
