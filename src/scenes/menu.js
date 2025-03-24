@@ -4,11 +4,13 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-
+        //load images and sprites
+        this.load.image('rink', './assets/img/HockeySlamRink.png')
     }
 
     create() {
         console.log('success')
+        this.scene.start('playScene')
     }
 
 
